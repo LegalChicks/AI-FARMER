@@ -1,0 +1,45 @@
+@page { size: A4 landscape; margin: 10mm; }
+
+* { box-shadow: none !important; }
+body { min-width: 0; background: #fff !important; color: #000; font-size: 9pt; }
+.shell { width: 100%; }
+.no-print, dialog, .status-meter, .scroll-hint { display: none !important; }
+.command-header { background: #fff !important; color: #000 !important; }
+.brand-line { padding: 0 0 5mm; }
+.brand-mark { border-color: #000; color: #000; }
+.eyebrow, .metadata dt { color: #333 !important; }
+.critical-ribbon { border: 1px solid #555; background: #fff !important; }
+.metadata div { border-color: #aaa !important; }
+.decision-grid { grid-template-columns: 2fr 1fr; padding-block: 5mm; }
+.weather-section { border: 1px solid #333; break-after: page; }
+.weather-metrics { grid-template-columns: repeat(5, 1fr); }
+.provider-strip { grid-template-columns: repeat(3, 1fr); }
+.weather-layout { grid-template-columns: 2fr 1fr; }
+.weather-alert-panel, .weather-table-frame { max-height: none; overflow: visible; }
+.weather-table { min-width: 0; font-size: 6.5pt; }
+.weather-table th { position: static; background: #e7e7e7 !important; color: #000; }
+.weather-record-disclosure { display: none; }
+.decision-card, .status-card, .metric-card, .technical-card, .records-section, .evidence-section, .sources-section { border-color: #777; background: #fff !important; }
+.phase-rail { grid-template-columns: repeat(8, 1fr); }
+.metrics-grid { grid-template-columns: repeat(5, 1fr); }
+.metric-value { color: #000; }
+.calendar-section { break-before: page; padding: 0; }
+.results-line { display: none; }
+.table-frame { max-height: none; overflow: visible; border: 0; }
+.operations-table { min-width: 0; font-size: 7.2pt; }
+.operations-table th { position: static; padding: 4px; border-color: #000; background: #e7e7e7 !important; color: #000; }
+.operations-table td { padding: 4px; border-color: #aaa; }
+.operations-table tr { break-inside: avoid; }
+.operations-table tbody tr.window-sterility td { background: #fff5d9 !important; }
+.operations-table tbody tr.window-anthesis td { background: #e8f5ed !important; }
+.done-cell { display: none; }
+.operations-table th:first-child { display: none; }
+.task-cell { min-width: 0; }
+.date-cell, .phase-cell, .line-cell, .risk-cell { width: auto; }
+.content-late { content-visibility: visible; contain-intrinsic-size: none; }
+.technical-grid { grid-template-columns: repeat(3, 1fr); break-before: page; }
+.record-list { grid-template-columns: repeat(3, 1fr); }
+.evidence-grid { grid-template-columns: repeat(4, 1fr); }
+.site-footer { border-top: 1px solid #000; background: #fff !important; color: #000; }
+a { color: #000; text-decoration: none; }
+.source-list a::after { content: " (" attr(href) ")"; overflow-wrap: anywhere; font-weight: 400; }

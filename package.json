@@ -1,0 +1,19 @@
+{
+  "name": "lingan-agronomist-mestiso-20",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Field operations dashboard for Mestiso 20 two-line hybrid rice seed production in Lanna, Solana, Cagayan.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/serve.mjs src",
+    "preview": "node scripts/serve.mjs dist",
+    "test": "node --test tests/*.test.mjs",
+    "lint": "npm run validate",
+    "weather:update": "node scripts/update-weather.mjs",
+    "validate": "npm run build && node scripts/validate.mjs && npm test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Lingan-Agronomist — Mestiso 20",
+  "short_name": "Lingan M20",
+  "description": "Field operations dashboard for Mestiso 20 hybrid rice seed production in Lanna, Solana.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#1b4332",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

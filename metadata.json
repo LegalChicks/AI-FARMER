@@ -1,0 +1,6 @@
+{
+  "name": "Mestiso 20 Operations",
+  "description": "Field operations dashboard for Mestiso 20 two-line hybrid rice seed production in Lanna, Solana, Cagayan.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

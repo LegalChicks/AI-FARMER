@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Field operations dashboard for Mestiso 20 two-line hybrid rice seed production in Lanna, Solana, Cagayan.">
+  <meta name="theme-color" content="#1b4332">
+  <title>Mestiso 20 Operations | Lingan-Agronomist</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <style>
+    :root{color-scheme:light;--forest:#1b4332;--paper:#f8fafc;--ink:#102a22;--amber:#d97706}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:1rem/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.shell{width:min(100% - 2rem,92rem);margin-inline:auto}.command-header{background:var(--forest);color:#fff}.brand-line{display:flex;align-items:center;gap:.75rem;padding:1rem 0}.brand-mark{display:grid;width:2.5rem;height:2.5rem;place-items:center;border:1px solid #ffffff38;border-radius:.65rem;background:#ffffff10;color:#fbbf24;font-weight:900}.eyebrow{margin:0;color:#a7f3d0;font:700 .72rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.11em;text-transform:uppercase}.brand-line h1{margin:.15rem 0 0;font-size:clamp(1.12rem,2.5vw,1.45rem);line-height:1.15}.critical-ribbon{border-block:1px solid #ffffff18;background:#102f24}.metadata{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin:0}.metadata div{padding:.75rem;border-inline-start:1px solid #ffffff18}.metadata dt{color:#a7f3d0;font:700 .65rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.09em;text-transform:uppercase}.metadata dd{margin:.25rem 0 0;font-size:.83rem;font-weight:750}.skip-link{position:fixed;z-index:100;top:.5rem;left:.5rem;padding:.7rem 1rem;border-radius:.5rem;background:#fff;color:var(--forest);font-weight:800;transform:translateY(-160%)}.skip-link:focus{transform:none}
+  </style>
+  <link rel="stylesheet" href="./assets/styles.css">
+  <link rel="stylesheet" href="./assets/print.css" media="print">
+  <script type="module" src="./assets/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to operations</a>
+  <header class="command-header">
+    <div class="shell brand-line">
+      <span class="brand-mark" aria-hidden="true">LA</span>
+      <div>
+        <p class="eyebrow">Two-line hybrid rice · field command system</p>
+        <h1>Lingan-Agronomist / Mestiso 20</h1>
+      </div>
+      <div class="header-actions no-print">
+        <button class="button button-ghost" id="open-settings" type="button">Plan settings</button>
+        <button class="button button-amber" id="open-observation" type="button">Record field data</button>
+        <button class="button button-amber" id="open-application" type="button">Record application</button>
+      </div>
+    </div>
+    <div class="critical-ribbon">
+      <dl class="shell metadata" aria-label="Critical production metadata">
+        <div><dt>Production site</dt><dd id="meta-location">Lanna, Solana, Cagayan</dd></div>
+        <div><dt>Target hybrid</dt><dd>NSIC Rc204H · Mestiso 20</dd></div>
+        <div><dt>Parents</dt><dd>PRUP TG102 × TG102M</dd></div>
+        <div><dt>Biological stagger</dt><dd id="meta-stagger">P-line +5 days</dd></div>
+        <div><dt>Row module</dt><dd id="meta-ratio">8 S : 2 P</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <main id="main-content" tabindex="-1">
+    <section class="shell decision-grid" aria-labelledby="decision-title">
+      <article class="decision-card decision-card-alert">
+        <div class="section-kicker"><span class="signal signal-amber" aria-hidden="true"></span>Deployment decision</div>
+        <h2 id="decision-title">Conditional go: synchrony supported; TGMS sterility must be proven.</h2>
+        <p>PhilRice’s M20 field work supports sowing TG102M five days after PRUP TG102. The planned S-line start on <strong id="decision-seed-date">20 September 2026</strong> pushes the modelled sterility-sensitive period into cool November–December conditions. Tuguegarao normals fall below the published TGMS temperature guardrail, so temperature logging and bagged S-line controls are release gates.</p>
+        <div class="decision-actions no-print">
+          <button class="button button-primary" type="button" id="jump-calendar">Open daily command table</button>
+          <button class="button button-secondary" type="button" id="print-dashboard">Print / save PDF</button>
+        </div>
+      </article>
+      <aside class="status-card" aria-labelledby="today-title">
+        <div class="section-kicker"><span class="signal signal-green" aria-hidden="true"></span>Clock status</div>
+        <h2 id="today-title">Today versus Day 0</h2>
+        <p class="status-number mono" id="today-offset">Calculating…</p>
+        <p class="muted" id="today-task">Calendar status will appear here.</p>
+        <div class="status-meter" aria-label="Completed calendar tasks"><span id="completion-meter"></span></div>
+        <p class="microcopy"><strong id="completion-count">0 of 125</strong> daily operations checked complete on this device.</p>
+      </aside>
+    </section>
+
+    <section class="shell weather-section" id="weather-intelligence" aria-labelledby="weather-title">
+      <div class="weather-command">
+        <div>
+          <p class="section-kicker"><span class="signal signal-green" aria-hidden="true"></span>Three-source weather intelligence</p>
+          <h2 id="weather-title">Lanna farm temperature and activity forecast</h2>
+          <p class="heading-note">Open-Meteo + MET Norway + 7Timer/GFS · barangay-center coordinates 17.6934° N, 121.7010° E · model guidance, verified against the field logger.</p>
+        </div>
+        <div class="weather-command-actions no-print">
+          <span class="weather-freshness" id="weather-freshness">Loading weather record…</span>
+          <button class="button button-secondary" id="refresh-weather" type="button">Check latest published forecast</button>
+        </div>
+      </div>
+
+      <div class="weather-metrics" aria-label="Present farm weather record">
+        <article><p>Current 2 m temperature</p><strong class="mono" id="weather-current">—</strong><small id="weather-current-time">Awaiting source</small></article>
+        <article><p>Present daylight mean</p><strong class="mono" id="weather-day-mean">—</strong><small>Sunrise-to-sunset model mean</small></article>
+        <article><p>Present night mean</p><strong class="mono" id="weather-night-mean">—</strong><small>Sunset/sunrise hours model mean</small></article>
+        <article><p>Provider agreement</p><strong class="mono" id="weather-agreement">—</strong><small id="weather-spread">Awaiting three sources</small></article>
+        <article><p>Next full refresh due</p><strong class="mono" id="weather-next-refresh">—</strong><small>Scheduled daily; 48 h maximum target</small></article>
+      </div>
+
+      <div class="provider-strip" id="weather-providers" aria-label="Weather forecast providers"></div>
+
+      <div class="weather-layout">
+        <div class="forecast-panel">
+          <div class="subsection-heading"><div><p class="section-kicker">Upcoming operations</p><h3>Daily forecast and crop exposure</h3></div><p id="weather-generated" class="mono weather-generated">—</p></div>
+          <div class="weather-table-frame" tabindex="0" aria-label="Scrollable multi-source farm weather forecast">
+            <table class="weather-table">
+              <caption>Multi-provider forecast for the Lanna field coordinate, linked to the configured Mestiso 20 crop day and activity.</caption>
+              <thead><tr><th scope="col">Date / crop day</th><th scope="col">Sources</th><th scope="col">Day mean</th><th scope="col">Night mean</th><th scope="col">Rain / wind</th><th scope="col">Affected operation</th><th scope="col">Decision signal</th></tr></thead>
+              <tbody id="weather-forecast-body"></tbody>
+            </table>
+          </div>
+        </div>
+        <aside class="weather-alert-panel" aria-labelledby="weather-alert-title">
+          <div class="subsection-heading">
+            <div>
+              <p class="section-kicker">Automated Crop Safeguards</p>
+              <h3 id="weather-alert-title">Action queue</h3>
+            </div>
+            <span class="alert-count mono" id="weather-alert-count" aria-label="Active threshold alerts count">0</span>
+          </div>
+          <div class="alert-simulator-bar no-print">
+            <label for="weather-alert-mode">Threshold Monitor:</label>
+            <select id="weather-alert-mode" aria-label="Weather threshold monitor mode">
+              <option value="live">Live weather observation</option>
+              <option value="sim-tgms-cold">Test condition: D65 Sterility cold drop (&lt; 24°C)</option>
+              <option value="sim-wind-gust">Test condition: High spray wind &amp; gust (26 km/h)</option>
+              <option value="sim-anthesis-rain">Test condition: D90 Anthesis active rain (14 mm)</option>
+              <option value="sim-heat-stress">Test condition: Extreme heat (&ge; 36.5°C)</option>
+            </select>
+          </div>
+          <div class="weather-alert-list" id="weather-alert-list" role="region" aria-live="polite"></div>
+        </aside>
+      </div>
+
+      <details class="weather-record-disclosure">
+        <summary>View weather refresh record and data limitations</summary>
+        <div class="weather-record-grid">
+          <div><h3>Recorded refreshes on this device</h3><div id="weather-history" class="weather-history"></div></div>
+          <div class="weather-limitations">
+            <h3>Decision boundary</h3>
+            <p>These values are numerical weather-model outputs for the barangay-center coordinate. “Daylight mean” and “night mean” are calculated from each provider’s time series using local sunrise and sunset. They are forecast-record values, not measurements from the rice canopy.</p>
+            <p>Use the on-farm logger and the field-observation form for actual canopy temperature. Forecast warnings can restrict an operation; they cannot certify TGMS sterility, spray safety, or seed-lot acceptance.</p>
+          </div>
+        </div>
+      </details>
+      <p class="weather-error" id="weather-error" role="status" hidden></p>
+    </section>
+
+    <section class="shell phase-section" aria-labelledby="phase-title">
+      <div class="section-heading">
+        <div><p class="section-kicker">Biological control plane</p><h2 id="phase-title">Production phase rail</h2></div>
+        <p class="heading-note">Dates are modelled from S-line Day 0. Observed PI and heading always override predictions.</p>
+      </div>
+      <ol class="phase-rail" id="phase-rail" role="list"></ol>
+      <div class="window-legend" aria-label="Critical modelled windows">
+        <span><i class="legend-swatch legend-sterility" aria-hidden="true"></i><strong>Sterility audit:</strong> D60–D88</span>
+        <span><i class="legend-swatch legend-anthesis" aria-hidden="true"></i><strong>Heading / anthesis:</strong> D85–D102</span>
+        <span><i class="legend-swatch legend-overlap" aria-hidden="true"></i><strong>Overlap:</strong> D85–D88</span>
+      </div>
+    </section>
+
+    <section class="shell metrics-grid" aria-label="Key production metrics">
+      <article class="metric-card"><p class="metric-label">S-line sowing</p><p class="metric-value mono" id="metric-s-date">20 SEP 2026</p><p class="metric-note">PRUP TG102 · Day 0</p></article>
+      <article class="metric-card"><p class="metric-label">P-line P1 sowing</p><p class="metric-value mono" id="metric-p-date">25 SEP 2026</p><p class="metric-note" id="metric-p-note">TG102M · Day 5</p></article>
+      <article class="metric-card metric-card-alert"><p class="metric-label">Sterility audit union</p><p class="metric-value mono" id="metric-sterility">19 NOV–17 DEC</p><p class="metric-note">Modelled D60–D88 · verify in field</p></article>
+      <article class="metric-card"><p class="metric-label">Heading bound</p><p class="metric-value mono" id="metric-heading">14 DEC–31 DEC</p><p class="metric-note">Public PRUP TG102 D50 range: 85–102 DAS</p></article>
+      <article class="metric-card"><p class="metric-label">Observed leaf rate</p><p class="metric-value mono">NOT PUBLISHED</p><p class="metric-note">Use marked-hill leaf counts; do not invent phyllochron</p></article>
+    </section>
+
+    <section class="shell input-command-section content-late" id="input-command" aria-labelledby="input-command-title">
+      <div class="protocol-lock">
+        <div><p class="section-kicker"><span class="signal signal-amber" aria-hidden="true"></span>Controlled-input protocol</p><h2 id="input-command-title">Fertilizer and chemical command board</h2></div>
+        <span class="lock-state" id="protocol-lock-state">RATES LOCKED · APPROVED VALUES REQUIRED</span>
+        <p>Public PhilRice M20 evidence supports a <strong>120–150 kg N/ha seasonal envelope</strong>, an <strong>8:2 S:P row ratio</strong>, four nitrogen applications in later PRUP TG102 work, and GA₃ timing at <strong>20–30% observed heading</strong>. It does not publish the current contract’s fertilizer grades, four split percentages, commercial GA₃ dose, or pesticide products. Enter those values only from the signed production protocol, field diagnosis, and current FPA label.</p>
+      </div>
+
+      <div class="input-planning-grid">
+        <article class="planner-panel">
+          <div class="subsection-heading"><div><p class="section-kicker">Four-gate nutrient plan</p><h3>Approved nitrogen allocation</h3></div><span class="mono mini-status" id="n-plan-status">INCOMPLETE</span></div>
+          <form id="nutrient-plan-form" class="compact-form">
+            <div class="form-field"><label for="target-n">Season N target (kg N/ha)</label><input id="target-n" name="targetN" type="number" min="1" max="300" step="0.1" inputmode="decimal" placeholder="Approved value"><small>Published M20 evidence: 120–150</small></div>
+            <div class="form-field"><label for="split-1">N1 basal at D18 (%)</label><input id="split-1" name="split1" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="Protocol %"></div>
+            <div class="form-field"><label for="split-2">N2 early tillering D30 (%)</label><input id="split-2" name="split2" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="Protocol %"></div>
+            <div class="form-field"><label for="split-3">N3 active tillering D40 (%)</label><input id="split-3" name="split3" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="Protocol %"></div>
+            <div class="form-field"><label for="split-4">N4 confirmed PI D54 (%)</label><input id="split-4" name="split4" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="Protocol %"></div>
+            <div class="form-field"><label for="target-p">P₂O₅ target (kg/ha)</label><input id="target-p" name="targetP" type="number" min="0" max="300" step="0.1" inputmode="decimal" placeholder="MOET / soil plan"></div>
+            <div class="form-field"><label for="target-k">K₂O target (kg/ha)</label><input id="target-k" name="targetK" type="number" min="0" max="300" step="0.1" inputmode="decimal" placeholder="MOET / soil plan"></div>
+            <div class="form-field"><label for="nutrient-approval">Approval / protocol reference</label><input id="nutrient-approval" name="approvalReference" maxlength="120" placeholder="Document, version, approver"></div>
+            <div class="form-actions field-wide"><button class="button button-primary" type="submit">Validate and save nutrient plan</button></div>
+          </form>
+          <div class="allocation-strip" id="n-allocation-results" aria-live="polite"><p>Enter the approved target and four percentages. The application will reject a total other than 100%.</p></div>
+        </article>
+
+        <article class="planner-panel">
+          <div class="subsection-heading"><div><p class="section-kicker">Product conversion</p><h3>From nutrient target to product mass</h3></div></div>
+          <form id="fertilizer-calculator" class="compact-form">
+            <div class="form-field"><label for="calc-nutrient">Nutrient required (kg/ha)</label><input id="calc-nutrient" name="nutrientKgHa" type="number" min="0" step="0.01" inputmode="decimal" required></div>
+            <div class="form-field"><label for="calc-grade">Nutrient in product (%)</label><input id="calc-grade" name="nutrientPercent" type="number" min="0.01" max="100" step="0.01" inputmode="decimal" required><small>Use the guaranteed analysis for the nutrient being calculated.</small></div>
+            <div class="form-field"><label for="calc-area">Actual treated area (ha)</label><input id="calc-area" name="areaHa" type="number" min="0.0001" step="0.0001" inputmode="decimal" required></div>
+            <div class="form-field"><label for="calc-bag">Package / bag size (kg)</label><input id="calc-bag" name="bagKg" type="number" min="0.01" step="0.01" inputmode="decimal" value="50"></div>
+            <div class="form-actions field-wide"><button class="button button-secondary" type="submit">Calculate product</button></div>
+          </form>
+          <div class="calculation-result" id="fertilizer-result" aria-live="polite"><strong>Formula</strong><span>product kg/ha = nutrient kg/ha ÷ (guaranteed analysis ÷ 100)</span></div>
+          <p class="microcopy">For compound fertilizer, repeat the nutrient balance for N, P₂O₅, K₂O, S, and Zn, then subtract each product’s contribution before calculating the next material. Never add separate results blindly.</p>
+        </article>
+
+        <article class="planner-panel ga3-panel">
+          <div class="subsection-heading"><div><p class="section-kicker">Heading-triggered formulation</p><h3>GA₃ product and carrier calculator</h3></div><span class="mono mini-status mini-status-amber">NO DEFAULT DOSE</span></div>
+          <form id="ga3-calculator" class="compact-form">
+            <div class="form-field"><label for="ga3-line">Target line</label><select id="ga3-line" name="line"><option>S-line</option><option>P-line</option></select></div>
+            <div class="form-field"><label for="ga3-active-rate">Approved active rate (g a.i./ha)</label><input id="ga3-active-rate" name="activeRateGHa" type="number" min="0.01" step="0.01" inputmode="decimal" required></div>
+            <div class="form-field"><label for="ga3-concentration">Product concentration (% a.i.)</label><input id="ga3-concentration" name="productConcentrationPercent" type="number" min="0.01" max="100" step="0.01" inputmode="decimal" required></div>
+            <div class="form-field"><label for="ga3-area">Actual treated area (ha)</label><input id="ga3-area" name="areaHa" type="number" min="0.0001" step="0.0001" inputmode="decimal" required></div>
+            <div class="form-field"><label for="ga3-water">Calibrated carrier (L/ha)</label><input id="ga3-water" name="waterLHa" type="number" min="1" step="0.1" inputmode="decimal" required></div>
+            <div class="form-field"><label for="ga3-split">This split (%)</label><input id="ga3-split" name="splitPercent" type="number" min="0.1" max="100" step="0.1" inputmode="decimal" required></div>
+            <div class="form-field"><label for="ga3-approval">Approval / protocol reference</label><input id="ga3-approval" name="approvalReference" maxlength="120" required placeholder="Signed protocol and version"></div>
+            <div class="form-actions field-wide"><button class="button button-secondary" type="submit">Calculate this GA₃ split</button></div>
+          </form>
+          <div class="calculation-result" id="ga3-result" aria-live="polite"><strong>Release gate</strong><span>Observed approved heading %, verified product concentration, dry foliage, calibrated sprayer, acceptable wind, and label-compliant rain interval.</span></div>
+          <p class="microcopy">Follow the product label for dissolution and mixing order. Use alcohol only when the approved product label or protocol specifies it; do not assume a solvent volume from a different formulation.</p>
+        </article>
+      </div>
+
+      <article class="chemical-schedule-panel">
+        <div class="subsection-heading"><div><p class="section-kicker">Precisely plotted control points</p><h3>Input and chemical operations by crop day</h3></div><button class="button button-primary no-print" type="button" id="open-application-secondary">Add application record</button></div>
+        <div class="chemical-schedule-frame" tabindex="0">
+          <table class="chemical-schedule-table">
+            <caption>Decision gates for fertilizer, GA₃, pest-control chemicals, residue intervals, and pre-harvest closure. A date opens assessment; it does not authorize a product by itself.</caption>
+            <thead><tr><th scope="col">Day / date</th><th scope="col">Gate</th><th scope="col">Trigger and exact execution</th><th scope="col">Target</th><th scope="col">Restraint</th></tr></thead>
+            <tbody id="chemical-schedule-body"></tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="application-ledger-panel" aria-labelledby="application-ledger-title">
+        <div class="subsection-heading"><div><p class="section-kicker">Traceability and residue control</p><h3 id="application-ledger-title">Fertilizer and chemical application ledger</h3></div><button class="button button-secondary no-print" type="button" id="export-applications">Export ledger CSV</button></div>
+        <p class="heading-note">Completed chemical applications require all eight gates: diagnosis, current registration, rice/target label, production approval, calibration, weather, PPE, and REI/PHI. Incomplete work can be saved only as a draft or hold.</p>
+        <div class="application-list" id="application-list"></div>
+        <p class="empty-records" id="application-empty">No fertilizer or chemical application records saved yet.</p>
+      </article>
+    </section>
+
+    <section class="shell calendar-section" id="calendar" aria-labelledby="calendar-title">
+      <div class="section-heading calendar-heading">
+        <div><p class="section-kicker">Master operational timeline</p><h2 id="calendar-title">D0–D124 daily command calendar</h2></div>
+        <div class="export-actions no-print">
+          <button class="button button-secondary" id="export-calendar" type="button">Export calendar CSV</button>
+          <button class="button button-secondary" id="export-records" type="button">Back up field records</button>
+        </div>
+      </div>
+
+      <form class="filter-bar no-print" id="calendar-filters">
+        <div class="filter-field filter-search">
+          <label for="search-operations">Search task or alert</label>
+          <input id="search-operations" name="query" type="search" autocomplete="off" placeholder="e.g. GA3, PI, rope, logger">
+        </div>
+        <div class="filter-field">
+          <label for="line-filter">Target line</label>
+          <select id="line-filter" name="line">
+            <option value="all">Any line</option>
+            <option value="S-line">S-line affected</option>
+            <option value="P-line">P-line affected</option>
+            <option value="Both">Both only</option>
+          </select>
+        </div>
+        <div class="filter-field">
+          <label for="phase-filter">Growth phase</label>
+          <select id="phase-filter" name="phase">
+            <option value="all">All phases</option>
+          </select>
+        </div>
+        <label class="check-filter" for="critical-filter">
+          <input id="critical-filter" name="critical" type="checkbox">
+          <span>Critical operations only</span>
+        </label>
+        <button class="button button-quiet" id="reset-filters" type="reset">Reset filters</button>
+      </form>
+      <p class="results-line" id="results-count" aria-live="polite">Showing 125 daily operations.</p>
+
+      <div class="table-frame" id="calendar-scroll" tabindex="0" aria-label="Scrollable daily operations table">
+        <div class="scroll-hint scroll-hint-left" aria-hidden="true"></div>
+        <div class="scroll-hint scroll-hint-right" aria-hidden="true"></div>
+        <table class="operations-table">
+          <caption>Daily Mestiso 20 seed-production operations. Day 0 is the configured PRUP TG102 sowing date. Calendar thresholds must wait for observed crop stage.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Done</th>
+              <th scope="col">Day / date</th>
+              <th scope="col">Growth phase</th>
+              <th scope="col">Technical execution</th>
+              <th scope="col">Target line</th>
+              <th scope="col">Risk / alert</th>
+            </tr>
+          </thead>
+          <tbody id="calendar-body"></tbody>
+        </table>
+        <p class="empty-state" id="calendar-empty" hidden>No operations match these filters.</p>
+      </div>
+    </section>
+
+    <section class="shell technical-grid content-late" aria-label="Technical control cards">
+      <article class="technical-card">
+        <p class="section-kicker">Synchronization remedials</p>
+        <h2>Correct from biology, not the date</h2>
+        <div class="protocol-list">
+          <div><span class="protocol-code">P LATE</span><p>First check water, stand, pest pressure, final leaf number, and PI. A general manual’s emergency urea rate is not M20-validated; trial any authorized correction on a marked strip before broad use.</p></div>
+          <div><span class="protocol-code">P EARLY</span><p>Do not chase it with a high S-line nitrogen dose. Recalculate overlap from heading counts and use the P-line’s longer flowering duration where adequate.</p></div>
+          <div><span class="protocol-code">GATE</span><p>At D54–D60, record final leaves and dissect primordia in both parents. P2/P3 remain labelled reserves unless evidence and the production supervisor authorize them.</p></div>
+        </div>
+      </article>
+
+      <article class="technical-card">
+        <p class="section-kicker">GA3 formulation</p>
+        <h2>Stage-triggered release protocol</h2>
+        <dl class="formula-grid">
+          <div><dt>Trigger</dt><dd>Observed approved heading percentage; PhilRice research reports best results at 20–30% heading</dd></div>
+          <div><dt>Rate</dt><dd>Enter signed M20 protocol value; no public current commercial dose found</dd></div>
+          <div><dt>Product</dt><dd>Calculate from verified formulation concentration and actual S or P treated area</dd></div>
+          <div><dt>Mixing</dt><dd>Follow product label mixing order and solvent requirement after water calibration</dd></div>
+        </dl>
+        <p class="callout callout-amber"><strong>S and TG102M numeric rates are protocol-controlled.</strong> PhilRice’s public article describes a higher P-line requirement qualitatively but gives no verified active-ingredient figure. Do not derive one by doubling an unverified S rate.</p>
+      </article>
+
+      <article class="technical-card">
+        <p class="section-kicker">Agrometeorological risk</p>
+        <h2>Cool-night release gate</h2>
+        <div class="weather-stack">
+          <div><span>SEP</span><strong>23.0 / 27.8°C</strong><small>normal min / mean · 226.0 mm rain</small></div>
+          <div><span>OCT</span><strong>22.0 / 26.6°C</strong><small>normal min / mean · 282.9 mm rain</small></div>
+          <div class="weather-risk"><span>NOV</span><strong>21.1 / 25.4°C</strong><small>normal min / mean · 258.4 mm rain</small></div>
+          <div class="weather-risk"><span>DEC</span><strong>19.8 / 23.8°C</strong><small>normal min / mean · 158.3 mm rain</small></div>
+        </div>
+        <p class="callout"><strong>PAGASA 2026 outlook:</strong> warmer-than-usual conditions do not remove cold-night risk; the outlook also flags dry condition/dry spell risk in Cagayan and 5–8 tropical cyclones in PAR during the forecast period.</p>
+      </article>
+    </section>
+
+    <section class="shell records-section content-late" aria-labelledby="records-title">
+      <div class="section-heading">
+        <div><p class="section-kicker">Field evidence ledger</p><h2 id="records-title">Latest observations on this device</h2></div>
+        <button class="button button-primary no-print" type="button" id="open-observation-secondary">Add observation</button>
+      </div>
+      <p class="heading-note">Thermal status compares recorded canopy minimum and daily mean with the published 24°C / 27°C TGMS guardrail. It does not certify sterility.</p>
+      <div class="record-list" id="observation-list"></div>
+      <p class="empty-records" id="observation-empty">No field observations recorded yet.</p>
+    </section>
+
+    <section class="shell evidence-section content-late" aria-labelledby="evidence-title">
+      <div class="section-heading"><div><p class="section-kicker">Research register</p><h2 id="evidence-title">What is known, modelled, and still missing</h2></div></div>
+      <div class="evidence-grid">
+        <article><span class="evidence-badge badge-documented">Documented</span><h3>Parent identity and stagger</h3><p>PRUP TG102 is the TGMS S-line; TG102M is the pollen parent. PhilRice’s M20 work supports a primary P sowing five days after S.</p></article>
+        <article><span class="evidence-badge badge-documented">Documented</span><h3>Flowering behavior</h3><p>Public M20 guidance reports about six flowering days for S and ten for P, with the opening peak near 10:00.</p></article>
+        <article><span class="evidence-badge badge-modelled">Modelled</span><h3>Sterility window</h3><p>D60–D88 is a conservative union based on the public 85–102 DAS S-line heading range and a 25–14 day pre-heading sensitive interval.</p></article>
+        <article><span class="evidence-badge badge-unknown">Protocol-controlled</span><h3>Product doses</h3><p>No complete public current M20 schedule gives the four N split quantities, GA₃ commercial dose, or pesticide products. The signed breeder/contract protocol, field diagnosis, and current label must complete them.</p></article>
+      </div>
+    </section>
+
+    <section class="shell sources-section content-late" aria-labelledby="sources-title">
+      <p class="section-kicker">Primary references</p>
+      <h2 id="sources-title">Source register</h2>
+      <ol class="source-list">
+        <li><a href="https://www.philrice.gov.ph/timing-essential-in-hybrid-seed-production/">DA-PhilRice — Timing essential in hybrid seed production</a><span>M20 parent timing, flowering duration and peak, rope pulling, qualitative P-line GA3.</span></li>
+        <li><a href="https://www.philrice.gov.ph/wp-content/uploads/2015/05/2012_Isabela.pdf">DA-PhilRice Isabela station report, 2012</a><span>8:2 row ratio, seasonal leaf/PI observations, 7-day site result, and provisional nutrition evidence.</span></li>
+        <li><a href="https://www.philrice.gov.ph/wp-content/uploads/2020/07/Hybrid-Rice-Program-Highlights-2019.pdf">DA-PhilRice Hybrid Rice Program highlights, 2019</a><span>PRUP TG102 field work using four nitrogen splits; MOET detected multiple deficiencies and required fertilizer adjustment.</span></li>
+        <li><a href="https://www.philrice.gov.ph/wp-content/uploads/2016/09/PhilRice-Milestones-2014-2015.pdf">DA-PhilRice milestones, 2014–2015</a><span>GA₃ timing evidence at 20–30% heading and M20 effective-accumulated-temperature/leaf-age observations.</span></li>
+        <li><a href="https://www.philrice.gov.ph/wp-content/uploads/2015/05/2013_STD.pdf">DA-PhilRice seed technology report, 2013</a><span>TGMS environmental safeguards: mean minimum ≥24°C and daily mean ≥27°C from PI for 2–3 weeks.</span></li>
+        <li><a href="https://fpa.da.gov.ph/resources/reports/registered-products/">Fertilizer and Pesticide Authority — registered products</a><span>Current Philippine fertilizer and pesticide registrations, crops, targets, registration numbers, and expiry dates. Recheck before every chemical decision.</span></li>
+        <li><a href="https://www.philrice.gov.ph/reduced-insecticide-use-cuts-farmers-costs/">DA-PhilRice — reduced insecticide use and PalayCheck IPM</a><span>Supports diagnosis and field observation before insecticide use instead of routine calendar spraying.</span></li>
+        <li><a href="https://pubfiles.pagasa.dost.gov.ph/pagasaweb/files/cad/CLIMATOLOGICAL%20NORMALS%20%281991-2020%29/TUGUEGARAO.pdf">PAGASA — Tuguegarao climatological normals, 1991–2020</a><span>Nearest long-term station’s monthly temperature and rainfall context.</span></li>
+        <li><a href="https://pubfiles.pagasa.dost.gov.ph/climps/climateforum/outlook.pdf">PAGASA — September 2026 to February 2027 climate outlook</a><span>Temperature, rainfall, dry-condition, El Niño, and tropical cyclone outlook.</span></li>
+        <li><a href="https://open-meteo.com/en/docs">Open-Meteo forecast API documentation</a><span>Free non-commercial global forecast, current conditions, hourly temperature, rain, wind, radiation, and sunrise/sunset calculations.</span></li>
+        <li><a href="https://api.met.no/weatherapi/locationforecast/2.0/documentation">MET Norway Locationforecast documentation</a><span>Free global point forecast; ECMWF is the stated global source outside the Nordic region. Fetched by the scheduled server-side task under MET identification and caching requirements.</span></li>
+        <li><a href="https://www.7timer.info/doc.php?lang=en">7Timer! API documentation</a><span>No-key NOAA/NCEP GFS-derived eight-day civil forecast used as the third independent comparison.</span></li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-grid">
+      <div><p class="eyebrow">Lingan-Agronomist</p><p>Operational evidence system for Mestiso 20 seed production.</p></div>
+      <p><strong>Release rule:</strong> calendar completion never substitutes for actual sterility, genetic-purity, isolation, and laboratory evidence.</p>
+      <p class="mono" id="plan-fingerprint">PLAN · 2026-09-20 · P+5 · 8:2</p>
+    </div>
+  </footer>
+
+  <dialog id="settings-dialog" aria-labelledby="settings-title">
+    <form method="dialog" class="dialog-card" id="settings-form">
+      <div class="dialog-header"><div><p class="section-kicker">Production configuration</p><h2 id="settings-title">Plan settings</h2></div><button class="icon-button" value="cancel" aria-label="Close plan settings" type="submit" formnovalidate>×</button></div>
+      <p class="dialog-intro">Edits regenerate every calendar date on this device. The documented M20 baseline remains P +5 days; a different stagger requires authorized field evidence.</p>
+      <div class="form-grid">
+        <div class="form-field field-wide"><label for="farm-name">Field / block name</label><input id="farm-name" name="farmName" maxlength="80" required></div>
+        <div class="form-field field-wide"><label for="municipality">Location</label><input id="municipality" name="municipality" maxlength="100" required></div>
+        <div class="form-field"><label for="seed-date">PRUP TG102 Day 0</label><input id="seed-date" name="seedDate" type="date" required></div>
+        <div class="form-field"><label for="p-stagger">TG102M P1 delay (days)</label><input id="p-stagger" name="pStagger" type="number" min="0" max="14" step="1" required><small>Documented baseline: 5</small></div>
+        <div class="form-field"><label for="row-ratio">S:P row ratio</label><input id="row-ratio" name="rowRatio" pattern="[0-9]{1,2}:[0-9]{1,2}" required><small>Research-supported baseline: 8:2</small></div>
+        <div class="form-field"><label for="s-lot">S-line seed lot</label><input id="s-lot" name="sLot" maxlength="80" required></div>
+        <div class="form-field"><label for="p-lot">P-line seed lot</label><input id="p-lot" name="pLot" maxlength="80" required></div>
+      </div>
+      <div class="dialog-actions"><button class="button button-quiet" type="button" id="restore-defaults">Restore research baseline</button><button class="button button-secondary" value="cancel" type="submit" formnovalidate>Cancel</button><button class="button button-primary" value="save" type="submit" id="save-settings">Save and regenerate</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="observation-dialog" aria-labelledby="observation-title">
+    <form method="dialog" class="dialog-card" id="observation-form">
+      <div class="dialog-header"><div><p class="section-kicker">Field evidence</p><h2 id="observation-title">Record observation</h2></div><button class="icon-button" value="cancel" aria-label="Close field observation" type="submit" formnovalidate>×</button></div>
+      <p class="dialog-intro">Use canopy-level readings where possible. Blank thermal fields remain incomplete and do not pass the TGMS guardrail.</p>
+      <div class="form-grid">
+        <div class="form-field"><label for="observation-date">Date</label><input id="observation-date" name="date" type="date" required></div>
+        <div class="form-field"><label for="observation-line">Line / area</label><select id="observation-line" name="line"><option>S-line</option><option>P-line</option><option>Both</option><option>Weather station</option></select></div>
+        <div class="form-field"><label for="minimum-temperature">Canopy minimum (°C)</label><input id="minimum-temperature" name="minTemperature" type="number" min="10" max="45" step="0.1" inputmode="decimal"></div>
+        <div class="form-field"><label for="mean-temperature">Daily mean (°C)</label><input id="mean-temperature" name="meanTemperature" type="number" min="10" max="45" step="0.1" inputmode="decimal"></div>
+        <div class="form-field"><label for="rainfall">Rainfall (mm)</label><input id="rainfall" name="rainfall" type="number" min="0" max="1000" step="0.1" inputmode="decimal"></div>
+        <div class="form-field"><label for="water-depth">Water depth (cm)</label><input id="water-depth" name="waterDepth" type="number" min="0" max="50" step="0.5" inputmode="decimal"></div>
+        <div class="form-field field-wide"><label for="field-notes">Observation / action</label><textarea id="field-notes" name="notes" rows="4" maxlength="600" required placeholder="Leaf count, PI, heading %, bagged controls, pollen shed, intervention…"></textarea></div>
+      </div>
+      <div class="dialog-actions"><button class="button button-secondary" value="cancel" type="submit" formnovalidate>Cancel</button><button class="button button-primary" value="save" type="submit">Save observation</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="application-dialog" aria-labelledby="application-title">
+    <form method="dialog" class="dialog-card" id="application-form">
+      <div class="dialog-header"><div><p class="section-kicker">Input traceability</p><h2 id="application-title">Record fertilizer or chemical operation</h2></div><button class="icon-button" value="cancel" aria-label="Close application record" type="submit" formnovalidate>×</button></div>
+      <p class="dialog-intro">Use a draft while any authorization field is missing. A completed chemical application cannot be saved until every decision and safety gate below is checked.</p>
+      <div class="form-grid">
+        <div class="form-field"><label for="application-date">Date</label><input id="application-date" name="date" type="date" required></div>
+        <div class="form-field"><label for="application-status">Record status</label><select id="application-status" name="status"><option value="Draft">Draft / preparing</option><option value="Hold">Held / not applied</option><option value="Completed">Completed application</option></select></div>
+        <div class="form-field"><label for="application-category">Input category</label><select id="application-category" name="category"><option>Fertilizer</option><option>GA₃ / plant growth regulator</option><option>Herbicide</option><option>Molluscicide</option><option>Insecticide</option><option>Fungicide</option><option>Bactericide</option><option>Rodenticide</option><option>Foliar nutrient</option><option>Other</option></select></div>
+        <div class="form-field"><label for="application-line">Target line / area</label><select id="application-line" name="line"><option>S-line</option><option>P-line</option><option>Both, separately calculated</option><option>Nursery</option><option>Bund / non-crop area</option></select></div>
+        <div class="form-field field-wide"><label for="application-trigger">Diagnosis / stage / reason</label><textarea id="application-trigger" name="trigger" rows="2" maxlength="500" required placeholder="Observed heading %, MOET result, LCC/tiller diagnosis, mapped weed/pest/disease and threshold…"></textarea></div>
+        <div class="form-field"><label for="application-product">Product / trade name</label><input id="application-product" name="productName" maxlength="120" required></div>
+        <div class="form-field"><label for="application-active">Active ingredient or fertilizer grade</label><input id="application-active" name="activeIngredient" maxlength="160" required></div>
+        <div class="form-field"><label for="application-formulation">Formulation / concentration</label><input id="application-formulation" name="formulation" maxlength="100" placeholder="e.g. % a.i., N-P₂O₅-K₂O grade"></div>
+        <div class="form-field"><label for="application-registration">FPA registration no.</label><input id="application-registration" name="registrationNumber" maxlength="100" placeholder="Required for regulated products"></div>
+        <div class="form-field"><label for="application-expiry">Registration expiry</label><input id="application-expiry" name="registrationExpiry" type="date"></div>
+        <div class="form-field"><label for="application-target">Label crop and target</label><input id="application-target" name="cropTarget" maxlength="160" placeholder="Rice — named pest/disease/weed"></div>
+        <div class="form-field"><label for="application-label-rate">Label / approved rate</label><input id="application-label-rate" name="labelRate" maxlength="100" required placeholder="Include unit and basis"></div>
+        <div class="form-field"><label for="application-applied-rate">Actual applied rate</label><input id="application-applied-rate" name="appliedRate" maxlength="100" required placeholder="Include unit and basis"></div>
+        <div class="form-field"><label for="application-area">Actual treated area (ha)</label><input id="application-area" name="areaHa" type="number" min="0.0001" step="0.0001" inputmode="decimal" required></div>
+        <div class="form-field"><label for="application-water">Total carrier volume (L)</label><input id="application-water" name="waterVolumeL" type="number" min="0" step="0.1" inputmode="decimal"></div>
+        <div class="form-field"><label for="application-rei">Re-entry interval (REI)</label><input id="application-rei" name="rei" maxlength="80" required placeholder="From label; N/A if not applicable"></div>
+        <div class="form-field"><label for="application-phi">Pre-harvest interval (PHI)</label><input id="application-phi" name="phi" maxlength="80" required placeholder="From label; N/A if not applicable"></div>
+        <div class="form-field"><label for="application-operator">Operator</label><input id="application-operator" name="operator" maxlength="100" required></div>
+        <div class="form-field"><label for="application-supervisor">Approving supervisor</label><input id="application-supervisor" name="supervisor" maxlength="100"></div>
+        <div class="form-field"><label for="application-weather">Weather at operation</label><input id="application-weather" name="weather" maxlength="160" required placeholder="Wind, rain outlook, leaf wetness, temperature"></div>
+        <div class="form-field"><label for="application-ppe">PPE used</label><input id="application-ppe" name="ppe" maxlength="160" required placeholder="List label-required PPE"></div>
+        <fieldset class="gate-checklist field-wide">
+          <legend>Eight release gates</legend>
+          <label><input type="checkbox" name="diagnosisConfirmed"> Diagnosis or crop-stage trigger is recorded</label>
+          <label><input type="checkbox" name="registrationVerified"> Current FPA registration/expiry is verified, or documented N/A</label>
+          <label><input type="checkbox" name="labelVerified"> Label names the crop, target, rate, method, and restrictions, or documented N/A</label>
+          <label><input type="checkbox" name="approvalVerified"> M20 production supervisor approved the operation</label>
+          <label><input type="checkbox" name="calibrationVerified"> Treated area, equipment calibration, and mix calculation are verified</label>
+          <label><input type="checkbox" name="weatherVerified"> Weather, drift, rain, and leaf-wetness gates pass</label>
+          <label><input type="checkbox" name="ppeVerified"> PPE, handling, buffer, and disposal instructions are ready</label>
+          <label><input type="checkbox" name="intervalsRecorded"> REI, PHI, entry signs, and earliest harvest date are recorded</label>
+        </fieldset>
+        <div class="form-field field-wide"><label for="application-notes">Mixing sequence, equipment, batch/lot, result, restraint, or follow-up</label><textarea id="application-notes" name="notes" rows="4" maxlength="1000"></textarea></div>
+      </div>
+      <p class="form-error" id="application-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button class="button button-secondary" value="cancel" type="submit" formnovalidate>Cancel</button><button class="button button-primary" value="save" type="submit">Save application record</button></div>
+    </form>
+  </dialog>
+
+  <div class="visually-hidden" id="live-announcer" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

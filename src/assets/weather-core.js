@@ -9,6 +9,15 @@ export const WEATHER_LOCATION = Object.freeze({
   coordinateBasis: 'Barangay-center reference; replace with surveyed farm GPS when available.'
 });
 
+export const PAGASA_SEASONAL_URL = 'https://www.pagasa.dost.gov.ph/climate/climate-prediction/seasonal-forecast';
+
+export function classifyPagasaDryWetDay(rainMm) {
+  if (!Number.isFinite(rainMm)) return { type: 'unknown', label: 'Indeterminate', threshold: 'N/A' };
+  return rainMm >= 1.0
+    ? { type: 'wet', label: 'PAGASA Wet Day', threshold: '≥ 1.0 mm' }
+    : { type: 'dry', label: 'PAGASA Dry Day', threshold: '< 1.0 mm' };
+}
+
 export const WEATHER_THRESHOLDS = Object.freeze({
   tgmsMinimumC: 24,
   tgmsDailyMeanC: 27,

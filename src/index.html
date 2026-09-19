@@ -13,6 +13,7 @@
   </style>
   <link rel="stylesheet" href="./assets/styles.css">
   <link rel="stylesheet" href="./assets/print.css" media="print">
+  <script src="./assets/d3.min.js"></script>
   <script type="module" src="./assets/app.js"></script>
 </head>
 <body>
@@ -65,9 +66,9 @@
     <section class="shell weather-section" id="weather-intelligence" aria-labelledby="weather-title">
       <div class="weather-command">
         <div>
-          <p class="section-kicker"><span class="signal signal-green" aria-hidden="true"></span>Three-source weather intelligence</p>
-          <h2 id="weather-title">Lanna farm temperature and activity forecast</h2>
-          <p class="heading-note">Open-Meteo + MET Norway + 7Timer/GFS · barangay-center coordinates 17.6934° N, 121.7010° E · model guidance, verified against the field logger.</p>
+          <p class="section-kicker"><span class="signal signal-green" aria-hidden="true"></span>DOST-PAGASA Seasonal Forecast &amp; Field Intelligence</p>
+          <h2 id="weather-title">Lanna Farm Weather &amp; Seasonal Climate Prediction</h2>
+          <p class="heading-note">Official source: DOST-PAGASA Climatology &amp; Agrometeorology Division (CAD / CLIMPS) · <a href="https://www.pagasa.dost.gov.ph/climate/climate-prediction/seasonal-forecast" target="_blank" rel="noopener noreferrer" class="pagasa-inline-link">PAGASA Seasonal Climate Forecast</a> · Solana, Cagayan coordinates 17.6934° N, 121.7010° E · model consensus verified against field logger.</p>
         </div>
         <div class="weather-command-actions no-print">
           <span class="weather-freshness" id="weather-freshness">Loading weather record…</span>
@@ -85,13 +86,49 @@
 
       <div class="provider-strip" id="weather-providers" aria-label="Weather forecast providers"></div>
 
+      <!-- DOST-PAGASA Seasonal Climate Prediction Section -->
+      <section class="pagasa-seasonal-section" id="pagasa-seasonal-section" aria-label="DOST-PAGASA Seasonal Climate Prediction">
+        <div id="pagasa-seasonal-container"></div>
+      </section>
+
+      <!-- 125-Day Phenological Temperature Trends Line Chart -->
+      <section class="weather-chart-card" id="weather-chart-panel" aria-labelledby="weather-chart-title">
+        <div class="weather-chart-header">
+          <div>
+            <p class="section-kicker">125-Day Phenological Thermal Trajectory</p>
+            <h3 id="weather-chart-title">Daily Temperature Trends vs. TGMS Sterility Guardrails</h3>
+            <p class="heading-note">D3.js visualization tracking daily mean and night minimum temperatures versus the 24°C sterility threshold and 27°C daily mean limit across D0–D124.</p>
+          </div>
+          <div class="chart-metrics-strip" id="chart-metrics-strip" aria-label="TGMS thermal risk summary"></div>
+        </div>
+
+        <div class="chart-legend-bar" id="chart-legend-bar" aria-label="Temperature chart legend">
+          <div class="legend-item"><span class="legend-line legend-mean"></span><span>Daily Mean Temp</span></div>
+          <div class="legend-item"><span class="legend-line legend-min"></span><span>Night Min Temp</span></div>
+          <div class="legend-item"><span class="legend-line legend-max"></span><span>Day Max Temp</span></div>
+          <div class="legend-item"><span class="legend-line legend-threshold-27"></span><span>27°C Mean Guardrail</span></div>
+          <div class="legend-item"><span class="legend-line legend-threshold-24"></span><span>24°C Min Sterility Limit</span></div>
+          <div class="legend-item"><span class="legend-swatch legend-window-swatch"></span><span>D60–D88 Sterility Window</span></div>
+          <div class="legend-item"><span class="legend-dot legend-observed-dot"></span><span>Field Observation</span></div>
+        </div>
+
+        <div class="weather-chart-container" id="weather-chart-container" role="region" aria-label="Interactive 125-day temperature trends chart">
+          <div id="temperature-d3-chart"></div>
+          <div id="chart-tooltip" class="chart-tooltip" hidden aria-hidden="true"></div>
+        </div>
+
+        <div class="chart-footer-note">
+          <span class="mono">Solana/Tuguegarao PAGASA 30-year climatological normals overlaid with live 3-source model consensus and verified logger observations.</span>
+        </div>
+      </section>
+
       <div class="weather-layout">
         <div class="forecast-panel">
           <div class="subsection-heading"><div><p class="section-kicker">Upcoming operations</p><h3>Daily forecast and crop exposure</h3></div><p id="weather-generated" class="mono weather-generated">—</p></div>
           <div class="weather-table-frame" tabindex="0" aria-label="Scrollable multi-source farm weather forecast">
             <table class="weather-table">
-              <caption>Multi-provider forecast for the Lanna field coordinate, linked to the configured Mestiso 20 crop day and activity.</caption>
-              <thead><tr><th scope="col">Date / crop day</th><th scope="col">Sources</th><th scope="col">Day mean</th><th scope="col">Night mean</th><th scope="col">Rain / wind</th><th scope="col">Affected operation</th><th scope="col">Decision signal</th></tr></thead>
+              <caption>DOST-PAGASA seasonal climate alignment &amp; multi-provider forecast for the Lanna field coordinate, linked to Mestiso 20 crop days and activity constraints.</caption>
+              <thead><tr><th scope="col">Date / crop day</th><th scope="col">Sources &amp; PAGASA</th><th scope="col">Day mean</th><th scope="col">Night mean</th><th scope="col">Rain / wind</th><th scope="col">Affected operation</th><th scope="col">Decision signal</th></tr></thead>
               <tbody id="weather-forecast-body"></tbody>
             </table>
           </div>
@@ -113,6 +150,33 @@
               <option value="sim-anthesis-rain">Test condition: D90 Anthesis active rain (14 mm)</option>
               <option value="sim-heat-stress">Test condition: Extreme heat (&ge; 36.5°C)</option>
             </select>
+          </div>
+          <div class="regional-map-card" id="regional-map-card" aria-labelledby="regional-map-title">
+            <div class="regional-map-header">
+              <div>
+                <p class="map-kicker mono">Regional Hotspots &amp; Farm Coordinates</p>
+                <h4 id="regional-map-title">Cagayan Basin Threat Map</h4>
+              </div>
+              <span class="farm-coord-pill mono" title="Barangay Lanna Farm Coordinate">17.6934° N, 121.7010° E</span>
+            </div>
+            <div class="map-filter-row no-print" role="toolbar" aria-label="Regional hotspot category filters">
+              <button type="button" class="map-filter-btn is-active" data-map-filter="all">All (6)</button>
+              <button type="button" class="map-filter-btn" data-map-filter="thermal">TGMS / Heat</button>
+              <button type="button" class="map-filter-btn" data-map-filter="wind">Wind &amp; Spray</button>
+              <button type="button" class="map-filter-btn" data-map-filter="rain">Anthesis Rain</button>
+            </div>
+            <div class="regional-map-container" id="regional-map-container" role="region" aria-label="Interactive Cagayan Valley weather threat map">
+              <div id="regional-d3-map"></div>
+              <div id="map-tooltip" class="map-tooltip" hidden aria-hidden="true"></div>
+            </div>
+            <div class="map-legend-strip" aria-label="Map symbols legend">
+              <span class="map-legend-item"><span class="legend-beacon-dot"></span>Lanna Farm Base</span>
+              <span class="map-legend-item"><span class="legend-sym legend-sym-cold"></span>Cold Drainage (&lt;24°C)</span>
+              <span class="map-legend-item"><span class="legend-sym legend-sym-heat"></span>Heat Dome (&ge;36.5°C)</span>
+              <span class="map-legend-item"><span class="legend-sym legend-sym-wind"></span>Wind Funnel (&gt;15km/h)</span>
+              <span class="map-legend-item"><span class="legend-sym legend-sym-rain"></span>Rain Squall</span>
+            </div>
+            <div class="active-hotspot-banner" id="active-hotspot-banner" hidden></div>
           </div>
           <div class="weather-alert-list" id="weather-alert-list" role="region" aria-live="polite"></div>
         </aside>

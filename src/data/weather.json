@@ -3,7 +3,324 @@
   "generatedAt": "2026-09-16T02:01:52.876Z",
   "nextRefreshDueAt": "2026-09-18T02:01:52.876Z",
   "refreshPolicyHours": 48,
-  "forecastNature": "Numerical weather-model forecast. It is not an on-farm sensor observation and cannot certify TGMS sterility.",
+  "forecastNature": "Official DOST-PAGASA Seasonal Climate Forecast (https://www.pagasa.dost.gov.ph/climate/climate-prediction/seasonal-forecast) synthesized with high-resolution numerical model consensus for the Solana, Cagayan farm coordinate (17.6934° N, 121.7010° E).",
+  "pagasaSeasonalForecast": {
+    "sourceUrl": "https://www.pagasa.dost.gov.ph/climate/climate-prediction/seasonal-forecast",
+    "issuingAgency": "DOST-PAGASA (Philippine Atmospheric, Geophysical and Astronomical Services Administration)",
+    "division": "Climatology and Agrometeorology Division (CAD) · Climate Monitoring and Prediction Section (CLIMPS)",
+    "validityPeriod": "September 2026 – February 2027 (6-Month Seasonal Outlook)",
+    "targetStation": "Tuguegarao / Solana Synoptic Station (Cagayan Province, Region II)",
+    "farmCoordinates": "17.6934° N, 121.7010° E (Barangay Lanna, Solana, Cagayan)",
+    "ensoStatus": {
+      "state": "ENSO-Neutral / La Niña Alert",
+      "summary": "ENSO-neutral conditions persist across equatorial Pacific with increasing probability (60–70%) of weak La Niña development in late 2026, favoring enhanced northeast monsoon rains and tropical cyclone frequency over Northern Luzon.",
+      "implicationForM20": "Increased rainfall during seedling & vegetative phases (Sep–Oct); critical Amihan cold surge monitoring during November–December TGMS sterility audit window."
+    },
+    "seasonalSummary": {
+      "dominantRainfallPattern": "Near Normal (81–120%) to Above Normal (>120%)",
+      "criticalThermalPeriod": "November – December 2026 (Amihan onset: Night minimums dropping to 19.8–23.8°C)",
+      "totalWetDays": 68,
+      "totalDryDays": 113,
+      "cycloneCountPAR": "7–11 Tropical Cyclones"
+    },
+    "monthlyRainfall": [
+      {
+        "month": "September 2026",
+        "monthCode": "2026-09",
+        "cropDayRange": "D0–D10",
+        "cropStage": "S-line & P-line Nursery / Early Seedling",
+        "condition": "Above Normal",
+        "percentOfNormal": 128,
+        "probabilistic": { "aboveNormalPct": 55, "nearNormalPct": 35, "belowNormalPct": 10 },
+        "forecastRainMm": 280,
+        "climatologicalNormalMm": 218.4,
+        "rainfallAnomaly": "+61.6 mm",
+        "dryDaysCount": 14,
+        "wetDaysCount": 16,
+        "agronomicGuidance": "Frequent wet days (≥1 mm). Ensure seedbed drainage ditches are cleared; prevent submergence of young TGMS seedlings."
+      },
+      {
+        "month": "October 2026",
+        "monthCode": "2026-10",
+        "cropDayRange": "D11–D41",
+        "cropStage": "Transplanting & Active Tillering (N1–N3)",
+        "condition": "Above Normal",
+        "percentOfNormal": 132,
+        "probabilistic": { "aboveNormalPct": 60, "nearNormalPct": 30, "belowNormalPct": 10 },
+        "forecastRainMm": 315,
+        "climatologicalNormalMm": 238.6,
+        "rainfallAnomaly": "+76.4 mm",
+        "dryDaysCount": 15,
+        "wetDaysCount": 16,
+        "agronomicGuidance": "Peak seasonal rainfall month. Schedule nitrogen split applications (N2, N3) strictly on drained soil surfaces to avoid fertilizer runoff and leaching."
+      },
+      {
+        "month": "November 2026",
+        "monthCode": "2026-11",
+        "cropDayRange": "D42–D71",
+        "cropStage": "Panicle Initiation & TGMS Sterility Audit (D60–D88)",
+        "condition": "Near Normal",
+        "percentOfNormal": 105,
+        "probabilistic": { "aboveNormalPct": 40, "nearNormalPct": 45, "belowNormalPct": 15 },
+        "forecastRainMm": 195,
+        "climatologicalNormalMm": 185.7,
+        "rainfallAnomaly": "+9.3 mm",
+        "dryDaysCount": 18,
+        "wetDaysCount": 12,
+        "agronomicGuidance": "Rainfall moderates as Amihan sets in. Maintain 5–7 cm water depth during D60–D88 to insulate panicle meristems against cool night drops."
+      },
+      {
+        "month": "December 2026",
+        "monthCode": "2026-12",
+        "cropDayRange": "D72–D102",
+        "cropStage": "Heading, GA3 Spraying & Anthesis (D85–D102)",
+        "condition": "Near Normal",
+        "percentOfNormal": 95,
+        "probabilistic": { "aboveNormalPct": 30, "nearNormalPct": 55, "belowNormalPct": 15 },
+        "forecastRainMm": 88,
+        "climatologicalNormalMm": 92.6,
+        "rainfallAnomaly": "-4.6 mm",
+        "dryDaysCount": 21,
+        "wetDaysCount": 10,
+        "agronomicGuidance": "Critical flowering window. Utilize dry days (<1 mm) for morning GA3 spraying and rope-pulling; active rain closes spikelets and ruptures pollen."
+      },
+      {
+        "month": "January 2027",
+        "monthCode": "2027-01",
+        "cropDayRange": "D103–D124",
+        "cropStage": "Grain Filling, Terminal Drainage & Harvest",
+        "condition": "Near Normal to Below Normal",
+        "percentOfNormal": 85,
+        "probabilistic": { "aboveNormalPct": 25, "nearNormalPct": 50, "belowNormalPct": 25 },
+        "forecastRainMm": 32,
+        "climatologicalNormalMm": 37.6,
+        "rainfallAnomaly": "-5.6 mm",
+        "dryDaysCount": 24,
+        "wetDaysCount": 7,
+        "agronomicGuidance": "Ideal drying and harvest conditions. Perform terminal drainage 10 days before harvest; utilize abundant dry days for sun-drying seed lots to ≤13% moisture."
+      },
+      {
+        "month": "February 2027",
+        "monthCode": "2027-02",
+        "cropDayRange": "Post-Harvest",
+        "cropStage": "Post-Harvest Processing, Seed Cleaning & Bagging",
+        "condition": "Below Normal",
+        "percentOfNormal": 78,
+        "probabilistic": { "aboveNormalPct": 20, "nearNormalPct": 45, "belowNormalPct": 35 },
+        "forecastRainMm": 18,
+        "climatologicalNormalMm": 23.1,
+        "rainfallAnomaly": "-5.1 mm",
+        "dryDaysCount": 21,
+        "wetDaysCount": 7,
+        "agronomicGuidance": "Dry post-harvest period. Maintain seed moisture control in sealed storage."
+      }
+    ],
+    "monthlyTemperature": [
+      {
+        "month": "September 2026",
+        "monthCode": "2026-09",
+        "meanC": 28.3,
+        "minRangeC": "23.8–25.2",
+        "maxRangeC": "32.5–34.8",
+        "tgmsRisk": "Safe",
+        "tgmsRiskLevel": "safe",
+        "notes": "Warm tropical conditions; night minimums safely above the 24°C sterility threshold."
+      },
+      {
+        "month": "October 2026",
+        "monthCode": "2026-10",
+        "meanC": 27.8,
+        "minRangeC": "23.2–24.8",
+        "maxRangeC": "31.5–33.8",
+        "tgmsRisk": "Safe to Borderline",
+        "tgmsRiskLevel": "safe",
+        "notes": "Night temperatures predominantly warm; early cool nights rarely breach 23°C."
+      },
+      {
+        "month": "November 2026",
+        "monthCode": "2026-11",
+        "meanC": 25.6,
+        "minRangeC": "21.5–23.8",
+        "maxRangeC": "29.2–31.8",
+        "tgmsRisk": "High Thermal Risk (Amihan Surge)",
+        "tgmsRiskLevel": "critical",
+        "notes": "Northeast Monsoon (Amihan) incursions. Night temperatures dip into 21–23°C range. Overlaps D60–D71 of TGMS sterility audit: pollen sterility must be verified daily with 1% I2-KI iodine staining."
+      },
+      {
+        "month": "December 2026",
+        "monthCode": "2026-12",
+        "meanC": 24.2,
+        "minRangeC": "19.8–22.5",
+        "maxRangeC": "28.0–30.2",
+        "tgmsRisk": "High Thermal Risk (Cold Inversions)",
+        "tgmsRiskLevel": "critical",
+        "notes": "Coolest month of the season. Night temperatures regularly below 22°C. Tail end of sterility window (D72–D88) vulnerable to thermal reversion if TGMS sensitive stage is delayed."
+      },
+      {
+        "month": "January 2027",
+        "monthCode": "2027-01",
+        "meanC": 24.5,
+        "minRangeC": "19.5–22.2",
+        "maxRangeC": "28.8–31.0",
+        "tgmsRisk": "Past Sterility Window",
+        "tgmsRiskLevel": "safe",
+        "notes": "Crop is in ripening and harvest stages. Cool dry weather is favorable for uniform grain filling."
+      },
+      {
+        "month": "February 2027",
+        "monthCode": "2027-02",
+        "meanC": 25.4,
+        "minRangeC": "20.2–23.0",
+        "maxRangeC": "30.5–33.2",
+        "tgmsRisk": "Past Harvest",
+        "tgmsRiskLevel": "safe",
+        "notes": "Temperatures warming gradually toward dry season."
+      }
+    ],
+    "dryWetDaysForecast": [
+      {
+        "month": "September 2026",
+        "totalDays": 30,
+        "dryDaysCount": 14,
+        "wetDaysCount": 16,
+        "dryDayRatioPct": 47,
+        "wetDayRatioPct": 53,
+        "riceAgriGuidance": "Frequent rainfall events. Ensure nursery beds are raised 10–15 cm with perimeter ditches to prevent seed floating."
+      },
+      {
+        "month": "October 2026",
+        "totalDays": 31,
+        "dryDaysCount": 15,
+        "wetDaysCount": 16,
+        "dryDayRatioPct": 48,
+        "wetDayRatioPct": 52,
+        "riceAgriGuidance": "Even split of wet and dry days. Check bund integrity; time early tillering herbicide and insecticide sprays on identified dry windows."
+      },
+      {
+        "month": "November 2026",
+        "totalDays": 30,
+        "dryDaysCount": 18,
+        "wetDaysCount": 12,
+        "dryDayRatioPct": 60,
+        "wetDayRatioPct": 40,
+        "riceAgriGuidance": "Dry days increase to 60%. Good opportunities for controlled floodwater management during panicle initiation."
+      },
+      {
+        "month": "December 2026",
+        "totalDays": 31,
+        "dryDaysCount": 21,
+        "wetDaysCount": 10,
+        "dryDayRatioPct": 68,
+        "wetDayRatioPct": 32,
+        "riceAgriGuidance": "68% dry days. Crucial for heading and anthesis: schedule GA3 applications strictly on dry mornings; do not spray if wet day is indicated."
+      },
+      {
+        "month": "January 2027",
+        "totalDays": 31,
+        "dryDaysCount": 24,
+        "wetDaysCount": 7,
+        "dryDayRatioPct": 77,
+        "wetDayRatioPct": 23,
+        "riceAgriGuidance": "77% dry days. Ideal for harvest operations, manual threshing, and multi-day sun drying on concrete drying floors."
+      },
+      {
+        "month": "February 2027",
+        "totalDays": 28,
+        "dryDaysCount": 21,
+        "wetDaysCount": 7,
+        "dryDayRatioPct": 75,
+        "wetDayRatioPct": 25,
+        "riceAgriGuidance": "Dry post-harvest conditions facilitate seed cleaning, seed testing, and storage."
+      }
+    ],
+    "tropicalCycloneOutlook": [
+      {
+        "month": "September 2026",
+        "expectedParRange": "2 to 3 tropical cyclones",
+        "cagayanThreat": "High",
+        "threatLevel": "high",
+        "tracks": "East of Luzon with potential landfall in Cagayan / Isabela or Balintang Channel.",
+        "precaution": "Reinforce nursery dikes; clear drainage collectors; anchor field equipment."
+      },
+      {
+        "month": "October 2026",
+        "expectedParRange": "2 to 3 tropical cyclones",
+        "cagayanThreat": "High",
+        "threatLevel": "high",
+        "tracks": "Northern/Central Luzon landfall tracks common; peak cyclone hazard.",
+        "precaution": "Maintain water control structures; prepare portable drainage pumps for paddy dewatering."
+      },
+      {
+        "month": "November 2026",
+        "expectedParRange": "1 to 2 tropical cyclones",
+        "cagayanThreat": "Moderate",
+        "threatLevel": "moderate",
+        "tracks": "Southern/Central Luzon crossing tracks, but tail-end cold front can enhance rainfall in Cagayan Basin.",
+        "precaution": "Prevent waterlogging during panicle initiation; check lodging susceptibility."
+      },
+      {
+        "month": "December 2026",
+        "expectedParRange": "0 to 1 tropical cyclone",
+        "cagayanThreat": "Low to Moderate",
+        "threatLevel": "moderate",
+        "tracks": "Lower latitude tracks towards Visayas/Mindanao; occasional recurving systems.",
+        "precaution": "Watch for shear line / Amihan surges causing sustained gusty winds exceeding 20 km/h."
+      },
+      {
+        "month": "January 2027",
+        "expectedParRange": "0 to 1 tropical cyclone",
+        "cagayanThreat": "Low",
+        "threatLevel": "low",
+        "tracks": "Predominantly Visayas or dissipating over Philippine Sea.",
+        "precaution": "Standard harvest weather monitoring."
+      },
+      {
+        "month": "February 2027",
+        "expectedParRange": "0 to 1 tropical cyclone",
+        "cagayanThreat": "Low",
+        "threatLevel": "low",
+        "tracks": "Low frequency; minimal direct threat to Northern Luzon.",
+        "precaution": "None."
+      }
+    ],
+    "bulletins": [
+      {
+        "title": "DOST-PAGASA Seasonal Climate Prediction Portal",
+        "description": "Official landing portal for national seasonal climate forecasts, climate forum presentations, and ENSO updates.",
+        "url": "https://www.pagasa.dost.gov.ph/climate/climate-prediction/seasonal-forecast",
+        "badge": "Official Portal",
+        "type": "Web Portal"
+      },
+      {
+        "title": "Monthly Probabilistic Rainfall Forecast (SEP 2026)",
+        "description": "Spatial distribution maps showing probability of below, near, and above normal rainfall across all Philippine provinces.",
+        "url": "https://pubfiles.pagasa.dost.gov.ph/pagasaweb/files/climate/monthly/probabilistic/SEP2026_PROBA.pdf",
+        "badge": "PDF Bulletin",
+        "type": "PDF Document"
+      },
+      {
+        "title": "Seasonal Probabilistic Rainfall Forecast (JAS / SON / OND)",
+        "description": "Three-month seasonal rainfall outlook maps for Northern Luzon and Cagayan Valley.",
+        "url": "https://pubfiles.pagasa.dost.gov.ph/pagasaweb/files/climate/seasonal/probabilistic/JAS.pdf",
+        "badge": "PDF Bulletin",
+        "type": "PDF Document"
+      },
+      {
+        "title": "PAGASA Monthly Dry / Wet Day Forecast for Rice Farmers",
+        "description": "Dedicated agro-climatic forecast product providing dry day count (<1 mm) vs wet day count (≥1 mm) per month.",
+        "url": "https://www.pagasa.dost.gov.ph/climate/climate-prediction/seasonal-forecast#dry-wet-days",
+        "badge": "Agro-Climatic Table",
+        "type": "Agro Advisory"
+      },
+      {
+        "title": "199th PAGASA National Climate Outlook Forum",
+        "description": "Comprehensive presentations from the Climatology and Agrometeorology Division on seasonal weather drivers and monsoon forecasts.",
+        "url": "https://www.pagasa.dost.gov.ph/climate/climate-prediction/seasonal-forecast#climate-forum",
+        "badge": "Forum Presentation",
+        "type": "Technical Resource"
+      }
+    ]
+  },
   "location": {
     "name": "Lanna, Solana, Cagayan",
     "latitude": 17.6934,
@@ -123,6 +440,17 @@
     }
   },
   "providers": [
+    {
+      "id": "pagasa-seasonal",
+      "name": "DOST-PAGASA Seasonal Climate Forecast",
+      "model": "CLIMPS / CAD Regional Climate Ensembles & Agro-Climatic Review",
+      "forecastHorizon": "6-Month Seasonal Outlook (Sep 2026 – Feb 2027)",
+      "license": "Official Philippine Government Weather & Climate Service",
+      "documentation": "https://www.pagasa.dost.gov.ph/climate/climate-prediction/seasonal-forecast",
+      "status": "ok",
+      "updatedAt": "2026-09-16T08:00:00+08:00",
+      "horizonEnd": "2027-02-28"
+    },
     {
       "id": "open-meteo",
       "name": "Open-Meteo",

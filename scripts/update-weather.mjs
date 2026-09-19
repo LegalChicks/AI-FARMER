@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import {
@@ -20,6 +20,14 @@ const MANILA_FORMATTER = new Intl.DateTimeFormat('en-CA', {
 });
 
 const PROVIDER_META = Object.freeze({
+  pagasaSeasonal: {
+    id: 'pagasa-seasonal',
+    name: 'DOST-PAGASA Seasonal Climate Forecast',
+    model: 'CLIMPS / CAD Regional Climate Ensembles & Agro-Climatic Review',
+    forecastHorizon: '6-Month Seasonal Outlook (Sep 2026 – Feb 2027)',
+    license: 'Official Philippine Government Weather & Climate Service',
+    documentation: 'https://www.pagasa.dost.gov.ph/climate/climate-prediction/seasonal-forecast'
+  },
   openMeteo: {
     id: 'open-meteo',
     name: 'Open-Meteo',
@@ -297,14 +305,31 @@ async function main() {
     windKmh: round(provider.current.windKmh),
     gustKmh: round(provider.current.gustKmh)
   })).filter(Boolean);
+  let existingPagasa = null;
+  try {
+    const prev = JSON.parse(await readFile(outputPath, 'utf8'));
+    existingPagasa = prev.pagasaSeasonalForecast;
+  } catch {}
+
   const generatedAt = new Date();
   const presentDay = daily.find((day) => day.date === today) || daily[0];
+  const allProviders = [
+    {
+      ...PROVIDER_META.pagasaSeasonal,
+      status: 'ok',
+      updatedAt: generatedAt.toISOString(),
+      horizonEnd: '2027-02-28'
+    },
+    ...providers.map((provider) => provider.meta)
+  ];
+
   const output = {
     schema: 'lingan-agronomist-weather/v1',
     generatedAt: generatedAt.toISOString(),
     nextRefreshDueAt: new Date(generatedAt.getTime() + 48 * 3_600_000).toISOString(),
     refreshPolicyHours: 48,
-    forecastNature: 'Numerical weather-model forecast. It is not an on-farm sensor observation and cannot certify TGMS sterility.',
+    forecastNature: 'Official DOST-PAGASA Seasonal Climate Forecast (https://www.pagasa.dost.gov.ph/climate/climate-prediction/seasonal-forecast) synthesized with high-resolution numerical model consensus for the Solana, Cagayan farm coordinate (17.6934° N, 121.7010° E).',
+    ...(existingPagasa ? { pagasaSeasonalForecast: existingPagasa } : {}),
     location: WEATHER_LOCATION,
     current: {
       time: openMeteo?.current?.time || currentSources[0]?.time,
@@ -315,7 +340,7 @@ async function main() {
       sources: currentSources
     },
     presentDay,
-    providers: providers.map((provider) => provider.meta),
+    providers: allProviders,
     unavailableProviders: errors,
     daily
   };

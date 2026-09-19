@@ -24,6 +24,21 @@ import {
   scheduleWithDates,
   validateNitrogenPlan
 } from './chemical-core.js';
+import {
+  build125DayTemperatureSeries,
+  computeTgmsRiskMetrics,
+  renderTemperatureD3Chart
+} from './temperature-chart.js';
+import {
+  FARM_COORDINATE,
+  REGIONAL_HOTSPOTS,
+  renderRegionalD3Map
+} from './regional-map.js';
+import {
+  classifyPagasaDryWetDay,
+  getPagasaSeasonalAdvisory,
+  renderPagasaSeasonalForecast
+} from './pagasa-seasonal.js';
 
 const STORAGE = Object.freeze({
   config: 'lingan-agronomist.v1.config',
@@ -523,6 +538,7 @@ function renderAll() {
   renderNitrogenPlan();
   renderChemicalSchedule();
   renderApplications();
+  renderTemperatureTrendChart();
   if (weatherData) renderWeather();
 }
 
@@ -607,6 +623,8 @@ function renderProviders() {
     const link = document.createElement('a');
     link.href = provider.documentation;
     link.textContent = provider.name;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
     name.append(link);
     const model = document.createElement('small');
     model.textContent = `${provider.model} · ${provider.forecastHorizon}`;
@@ -648,7 +666,13 @@ function renderWeatherTable() {
     sources.className = `source-count confidence-${day.consensus.confidence}`;
     sources.textContent = `${day.consensus.sourceCount}/3 ${day.consensus.confidence}`;
     sources.title = day.sources.map((source) => `${source.sourceId}: day ${temperature(source.daylightMeanC)}, night ${temperature(source.nightMeanC)}`).join('\n');
-    sourcesCell.append(sources);
+
+    const dryWet = classifyPagasaDryWetDay(day.consensus.rainMm);
+    const pagasaBadge = document.createElement('span');
+    pagasaBadge.className = `pagasa-day-pill pill-pagasa-${dryWet.type}`;
+    pagasaBadge.textContent = `${dryWet.label} (${dryWet.threshold})`;
+    pagasaBadge.title = `DOST-PAGASA Rice Agronomy: ${dryWet.label} (${dryWet.threshold})`;
+    sourcesCell.append(sources, pagasaBadge);
 
     const dayCell = document.createElement('td');
     dayCell.className = 'weather-temperature';
@@ -795,6 +819,30 @@ function renderWeatherAlerts() {
 
   const { payload, cropDay: currentCropDay } = getActiveWeatherPayloadAndCropDay();
   const currentAlerts = evaluateCurrentWeatherAlerts(payload, currentCropDay);
+
+  const seasonalAdvisories = getPagasaSeasonalAdvisory(
+    currentCropDay,
+    weatherData.current?.time ? weatherData.current.time.slice(0, 10) : toIsoDate(localTodayAsUtc()),
+    weatherData.pagasaSeasonalForecast
+  );
+  if (seasonalAdvisories && seasonalAdvisories.length) {
+    for (const adv of seasonalAdvisories) {
+      currentAlerts.push({
+        isCurrent: true,
+        severity: adv.severity,
+        category: adv.category,
+        title: adv.title,
+        warning: adv.summary,
+        restraint: 'Factor DOST-PAGASA seasonal climate prediction into water depth and field activity scheduling.',
+        remedial: adv.action,
+        measured: 'DOST-PAGASA CAD Outlook',
+        threshold: 'Seasonal Risk Threshold',
+        time: weatherData.current?.time || new Date().toISOString(),
+        cropDay: currentCropDay,
+        affectedActivities: ['water management', 'sterility audit', 'field drainage']
+      });
+    }
+  }
 
   const forecastAlerts = [];
   if (Array.isArray(weatherData.daily)) {
@@ -965,6 +1013,98 @@ function renderWeatherAlerts() {
     empty.textContent = 'No configured weather threshold is crossed. Continue field observations.';
     list.append(empty);
   }
+
+  renderRegionalMap();
+}
+
+let mapActiveCategory = 'all';
+let selectedMapHotspot = null;
+
+function renderActiveHotspotBanner(hotspot) {
+  const banner = $('active-hotspot-banner');
+  if (!banner) return;
+  if (!hotspot) {
+    banner.hidden = true;
+    banner.textContent = '';
+    return;
+  }
+  banner.hidden = false;
+  banner.innerHTML = `
+    <strong>${hotspot.name}</strong> · <span class="mono">${hotspot.threshold}</span><br>
+    <span>${hotspot.hazard}</span>
+    <em>Mitigation: ${hotspot.mitigation}</em>
+  `;
+}
+
+function renderRegionalMap() {
+  const container = $('regional-d3-map');
+  if (!container || !weatherData) return;
+
+  const { payload, cropDay: currentCropDay } = getActiveWeatherPayloadAndCropDay();
+  const currentAlerts = evaluateCurrentWeatherAlerts(payload, currentCropDay);
+
+  renderRegionalD3Map(container, REGIONAL_HOTSPOTS, {
+    activeCategory: mapActiveCategory,
+    alertMode: weatherAlertMode,
+    liveAlerts: weatherAlertMode === 'live' ? currentAlerts : [],
+    selectedHotspotId: selectedMapHotspot?.id || null,
+    onSelectHotspot: (hotspot) => {
+      selectedMapHotspot = hotspot;
+      renderActiveHotspotBanner(hotspot);
+      announce(`Selected hotspot ${hotspot.name}: ${hotspot.hazard}`);
+      renderRegionalMap();
+    }
+  });
+}
+
+function renderTemperatureTrendChart() {
+  const chartContainer = $('temperature-d3-chart');
+  if (!chartContainer) return;
+  const series = build125DayTemperatureSeries(config.seedDate, weatherData, observations);
+  const currentCropDay = cropDayForDate(config.seedDate, toIsoDate(localTodayAsUtc()));
+  const metrics = computeTgmsRiskMetrics(series);
+
+  const strip = $('chart-metrics-strip');
+  if (strip) {
+    strip.textContent = '';
+    const items = [
+      {
+        label: 'Sterility Window',
+        value: metrics.riskLevel === 'critical' ? 'High Thermal Risk' : metrics.riskLevel === 'moderate' ? 'Moderate Risk' : 'Within Guardrails',
+        class: metrics.riskLevel === 'critical' ? 'badge-danger' : metrics.riskLevel === 'moderate' ? 'badge-warning' : 'badge-safe'
+      },
+      {
+        label: 'Sub-24°C Exposure (D60–D88)',
+        value: `${metrics.daysBelowMin} of ${metrics.totalWindowDays} days`,
+        class: metrics.daysBelowMin > 0 ? 'badge-danger' : 'badge-safe'
+      },
+      {
+        label: 'Sub-27°C Mean (D60–D88)',
+        value: `${metrics.daysBelowMean} of ${metrics.totalWindowDays} days`,
+        class: metrics.daysBelowMean > 0 ? 'badge-warning' : 'badge-safe'
+      },
+      {
+        label: 'Window Min Trajectory',
+        value: `${metrics.minInWindow.toFixed(1)}°C`,
+        class: metrics.minInWindow < 24 ? 'badge-danger' : 'badge-safe'
+      }
+    ];
+
+    for (const item of items) {
+      const chip = document.createElement('div');
+      chip.className = `chart-metric-chip ${item.class}`;
+      const lbl = document.createElement('span');
+      lbl.className = 'chip-label';
+      lbl.textContent = item.label;
+      const val = document.createElement('strong');
+      val.className = 'chip-val mono';
+      val.textContent = item.value;
+      chip.append(lbl, val);
+      strip.append(chip);
+    }
+  }
+
+  renderTemperatureD3Chart(chartContainer, series, currentCropDay);
 }
 
 function renderWeather() {
@@ -982,6 +1122,8 @@ function renderWeather() {
   freshness.className = `weather-freshness${stale ? ' is-stale' : ''}`;
   freshness.textContent = stale ? 'Forecast older than 48 h' : 'Three-source record current';
   renderProviders();
+  renderPagasaSeasonalForecast($('pagasa-seasonal-container'), weatherData.pagasaSeasonalForecast);
+  renderTemperatureTrendChart();
   renderWeatherTable();
   renderWeatherAlerts();
   renderWeatherHistory();
@@ -1145,6 +1287,7 @@ function renderObservations() {
     card.append(head, stats, notes, remove);
     elements.observationList.append(card);
   }
+  renderTemperatureTrendChart();
 }
 
 function deleteObservation(id) {
@@ -1262,11 +1405,34 @@ if (alertModeControl) {
   alertModeControl.addEventListener('change', (event) => {
     weatherAlertMode = event.target.value;
     renderWeatherAlerts();
+    renderRegionalMap();
     announce(`Threshold monitor updated to ${event.target.options[event.target.selectedIndex].text}.`);
+  });
+}
+
+const mapFilterRow = document.querySelector('.map-filter-row');
+if (mapFilterRow) {
+  mapFilterRow.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-map-filter]');
+    if (!button) return;
+    mapFilterRow.querySelectorAll('.map-filter-btn').forEach((btn) => btn.classList.remove('is-active'));
+    button.classList.add('is-active');
+    mapActiveCategory = button.dataset.mapFilter;
+    renderRegionalMap();
+    announce(`Regional map filtered to ${button.textContent}.`);
   });
 }
 
 window.setInterval(() => {
   if (weatherData) renderWeatherAlerts();
 }, 60_000);
+
+let chartResizeTimer;
+window.addEventListener('resize', () => {
+  window.clearTimeout(chartResizeTimer);
+  chartResizeTimer = window.setTimeout(() => {
+    renderTemperatureTrendChart();
+    renderRegionalMap();
+  }, 150);
+});
 

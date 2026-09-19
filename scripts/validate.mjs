@@ -14,6 +14,9 @@ const required = [
   'assets/app.js',
   'assets/chemical-core.js',
   'assets/weather-core.js',
+  'assets/temperature-chart.js',
+  'assets/regional-map.js',
+  'assets/d3.min.js',
   'data/weather.json',
   'favicon.svg',
   'manifest.webmanifest',
@@ -45,7 +48,7 @@ if (weather.schema !== 'lingan-agronomist-weather/v1') throw new Error('Unexpect
 if (!Array.isArray(weather.providers) || weather.providers.length < 2) throw new Error('Weather data has fewer than two available providers.');
 if (!Array.isArray(weather.daily) || weather.daily.length < 7) throw new Error('Weather data has fewer than seven forecast days.');
 
-for (const script of ['assets/calendar.js', 'assets/app.js', 'assets/weather-core.js', 'assets/chemical-core.js']) {
+for (const script of ['assets/calendar.js', 'assets/app.js', 'assets/weather-core.js', 'assets/chemical-core.js', 'assets/temperature-chart.js', 'assets/regional-map.js']) {
   const result = spawnSync(process.execPath, ['--check', path.join(dist, script)], { encoding: 'utf8' });
   if (result.status !== 0) throw new Error(result.stderr || `Syntax check failed for ${script}`);
 }
